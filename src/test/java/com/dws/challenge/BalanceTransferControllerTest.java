@@ -108,7 +108,7 @@ class BalanceTransferControllerTest {
         // unknown beneficiary transfer check
         this.mockMvc.perform(post("/v1/balanceTransfer").contentType(MediaType.APPLICATION_JSON)
                         .content("{\"accountFromId\": \"Id-1\",\"accountToId\" :\"Id-3\",\"amount\" :900.00 }")).andExpect(status().isBadRequest())
-                .andExpect(content().string("Account ID Id-3 not found "));
+                .andExpect(content().string("Beneficiary Account ID not found "));
         ;
     }
 
