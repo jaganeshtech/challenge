@@ -1,6 +1,7 @@
 package com.dws.challenge.repository;
 
 import com.dws.challenge.domain.Account;
+import com.dws.challenge.domain.Transaction;
 import com.dws.challenge.exception.DuplicateAccountIdException;
 import org.springframework.stereotype.Repository;
 
@@ -31,9 +32,14 @@ public class AccountsRepositoryInMemory implements AccountsRepository {
         accounts.clear();
     }
 
+
     @Override
-    public void update(Account account) {
-      accounts.put(account.getAccountId(), account);
+    public void transfer(Account fromAccount, Account toAccount, Transaction transaction) {
+        fromAccount.setBalance(fromAccount.getBalance().subtract(transaction.getAmount()));
+        toAccount.setBalance(toAccount.getBalance().add(transaction.getAmount()));
+     accounts.put(fromAccount.getAccountId(), fromAccount);
+        accounts.put(toAccount.getAccountId(), toAccount);
+
     }
 
 }

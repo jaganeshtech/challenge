@@ -39,17 +39,17 @@ public class BalanceTransferService {
         }
 
         if (fromAccount.getBalance().compareTo(transaction.getAmount()) >= 0) {
-
-            fromAccount.setBalance(fromAccount.getBalance().subtract(transaction.getAmount()));
-            toAccount.setBalance(toAccount.getBalance().add(transaction.getAmount()));
-            this.accountsRepository.update(fromAccount);
-            this.accountsRepository.update(toAccount);
+            synchronized (this) {
+                this.accountsRepository.transfer(fromAccount, toAccount, transaction);
+            }
             this.emailNotificationService.notifyAboutTransfer(fromAccount, "Amount " + transaction.getAmount() + " Transaction completed successfully to beneficiary account " + transaction.getAccountToId());
             this.emailNotificationService.notifyAboutTransfer(toAccount, "Credited Amount " + transaction.getAmount() + " from " + transaction.getAccountFromId());
+
             return "Transaction successful";
         } else {
             this.emailNotificationService.notifyAboutTransfer(fromAccount, "Amount " + transaction.getAmount() + " Transaction failed to beneficiary account " + transaction.getAccountToId() + ",due to Insufficient Balance");
             throw new RuntimeException("Transaction Failed ,Insufficient Balance");
         }
+
     }
 }
