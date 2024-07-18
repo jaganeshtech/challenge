@@ -2,6 +2,8 @@
 DWS challenge by DXC
 
 Spring version used : 3.3.1
+Lombok annotation   @Synchronized used for thread safety.
+
 
 API exposed port : 8080 
 
